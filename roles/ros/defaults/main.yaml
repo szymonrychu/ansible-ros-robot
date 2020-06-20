@@ -1,6 +1,6 @@
 ---
 ros_release: melodic
-ros_package: ros-base
+ros_package: desktop-full
 ros_user: szymonri
 
 
