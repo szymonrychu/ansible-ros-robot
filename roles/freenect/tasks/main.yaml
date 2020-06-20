@@ -1,5 +1,4 @@
 ---
-
 - name: Install freenect dependencies
   apt:
     pkg: 
@@ -19,17 +18,31 @@
 - name: Initialize catkin workspace
   command: bash -c "source /opt/ros/{{ ros_release }}/setup.bash; catkin_make"
   args:
-    chdir: /home/{{ ros_user }}/catkin_ws
-    # creates: /path/to/database
+    chdir:   /home/{{ ros_user }}/catkin_ws
+    creates: /home/{{ ros_user }}/catkin_ws/src/CMakeLists.txt
 
+- name: Download freenect sources
+  git:
+    repo: "{{ freenect_stack_url }}"
+    dest: /home/{{ ros_user }}/catkin_ws/src/freenect
+    version: "{{ freenect_stack_ref }}"
 
+- name: Build catkin workspace
+  command: bash -c "source /home/{{ ros_user }}/catkin_ws/devel/setup.bash; catkin_make -DCMAKE_INSTALL_PREFIX=/opt/ros/{{ ros_release }} install"
+  args:
+    chdir:   /home/{{ ros_user }}/catkin_ws
+    creates: /opt/ros/{{ ros_release }}/share/freenect_launch/launch/freenect.launch
 
+- name: Create service ros-freenect 
+  template:
+    src: ros-freenect.service.j2
+    dest: /etc/systemd/system/ros-freenect.service
+    owner: root
+    group: root
+    mode: '0644'
 
-    #     ros-${ROS_DISTRO}-rgbd-launch \
-    #      \
-    #      \
-    #     freenect \
-    #     udev;\
-    # useradd -m -s /bin/bash -G sudo,dialout ros;\
-    # echo "ros ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ros;\
-    # echo "export DISPLAY=:1" >> ~/.bashrc
+- name: roscore systemd service enable and start
+  systemd:
+    state: started
+    enabled: yes
+    name: ros-freenect

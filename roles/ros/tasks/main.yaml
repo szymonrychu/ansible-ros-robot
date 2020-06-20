@@ -21,11 +21,28 @@
     state: present
 
 - name: Initialize rosdep
-  command: bash -c "source /opt/ros/{{ ros_release }}/setup.bash; rosdep init"
+  command: bash -c "source /opt/ros/{{ ros_release }}/setup.bash; rosdep init; touch /home/{{ ros_user }}/.ros_initialized"
   args:
-    creates: /etc/ros/rosdep/sources.list.d/20-default.list
+    creates: "/home/{{ ros_user }}/.ros_initialized"
+
 
 - name: Update rosdep
-  command: bash -c "source /opt/ros/{{ ros_release }}/setup.bash; rosdep init"
+  command: bash -c "source /opt/ros/{{ ros_release }}/setup.bash; rosdep init; touch /home/{{ ros_user }}/.ros_updated"
   become: yes
   become_user: "{{ ros_user }}"
+  args:
+    creates: /home/{{ ros_user }}/.ros_updated
+    
+- name: roscore systemd service
+  template:
+    src: ros-core.service.j2
+    dest: /etc/systemd/system/ros-core.service
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: roscore systemd service enable and start
+  systemd:
+    state: started
+    enabled: yes
+    name: ros-core
