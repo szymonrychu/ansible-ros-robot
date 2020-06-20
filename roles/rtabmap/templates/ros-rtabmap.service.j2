@@ -1,0 +1,11 @@
+[Unit]
+Description=start ros rtabmap
+Wants=ros-core.service,ros-freenect.service
+After=ros-core.service,ros-freenect.service
+
+[Service]
+ExecStart=/bin/bash -c 'source /opt/ros/{{ ros_release }}/setup.bash; roslaunch rtabmap_ros visual_odometry.launch rtabmap_args:="--delete_db_on_start" rviz:=true rtabmapviz:=false'
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

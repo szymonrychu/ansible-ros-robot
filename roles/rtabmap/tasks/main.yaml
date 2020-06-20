@@ -1,0 +1,27 @@
+---
+- name: Install rtabmap dependencies
+  apt:
+    pkg: ros-{{ ros_release }}-rtabmap-ros
+    state: present
+
+- name: Create service ros-rtabmap 
+  template:
+    src: ros-rtabmap.service.j2
+    dest: /etc/systemd/system/ros-rtabmap.service
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Create visual_odometry.launch 
+  template:
+    src: visual_odometry.launch.j2
+    dest: /opt/ros/{{ ros_release }}/share/rtabmap_ros/launch/visual_odometry.launch
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: rtabmap systemd service enable and start
+  systemd:
+    state: started
+    enabled: yes
+    name: ros-rtabmap
