@@ -11,5 +11,21 @@
 
 - name: Install desired ROS package
   apt:
-    pkg: "ros-{{ ros_release }}-{{ ros_package }}"
+    pkg: 
+      - "ros-{{ ros_release }}-{{ ros_package }}"
+      - python-rosdep
+      - python-rosinstall
+      - python-rosinstall-generator 
+      - python-wstool
+      - build-essential
     state: present
+
+- name: Initialize rosdep
+  command: bash -c "source /opt/ros/{{ ros_release }}/setup.bash; rosdep init"
+  args:
+    creates: /etc/ros/rosdep/sources.list.d/20-default.list
+
+- name: Update rosdep
+  command: bash -c "source /opt/ros/{{ ros_release }}/setup.bash; rosdep init"
+  become: yes
+  become_user: "{{ ros_user }}"

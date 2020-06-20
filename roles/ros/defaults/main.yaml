@@ -1,6 +1,8 @@
 ---
-ros_release: "melodic"
-ros_package: "ros-base"
+ros_release: melodic
+ros_package: ros-base
+ros_user: szymonri
+
 
 # Optionally use a mirror for the ROS packages
 ros_apt_uri: "http://packages.ros.org/ros/ubuntu"

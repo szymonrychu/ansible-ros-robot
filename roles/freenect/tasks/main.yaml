@@ -1,0 +1,35 @@
+---
+
+- name: Install freenect dependencies
+  apt:
+    pkg: 
+      - ros-{{ ros_release }}-rgbd-launch
+      - ros-{{ ros_release }}-camera-info-manager
+      - ros-{{ ros_release }}-diagnostic-updater
+      - freenect
+    state: present
+
+- name: Create catkin workspace dir
+  file:
+    path: /home/{{ ros_user }}/catkin_ws/src
+    state: directory
+    mode: '0755'
+    owner: "{{ ros_user }}"
+
+- name: Initialize catkin workspace
+  command: bash -c "source /opt/ros/{{ ros_release }}/setup.bash; catkin_make"
+  args:
+    chdir: /home/{{ ros_user }}/catkin_ws
+    # creates: /path/to/database
+
+
+
+
+    #     ros-${ROS_DISTRO}-rgbd-launch \
+    #      \
+    #      \
+    #     freenect \
+    #     udev;\
+    # useradd -m -s /bin/bash -G sudo,dialout ros;\
+    # echo "ros ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/ros;\
+    # echo "export DISPLAY=:1" >> ~/.bashrc

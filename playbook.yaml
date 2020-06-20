@@ -8,3 +8,4 @@
     - ./vars/common.yaml
   roles:
     - ros
+    - freenect

@@ -1,0 +1,6 @@
+---
+ros_release: melodic
+ros_user: szymonri
+
+freenect_stack_url: https://github.com/szymonrychu/freenect_stack
+freenect_stack_ref: melodic-0.0.1
