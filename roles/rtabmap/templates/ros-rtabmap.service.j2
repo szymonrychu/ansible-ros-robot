@@ -4,7 +4,7 @@ Wants=ros-core.service,ros-freenect.service
 After=ros-core.service,ros-freenect.service
 
 [Service]
-ExecStart=/bin/bash -c 'source /opt/ros/{{ ros_release }}/setup.bash; roslaunch rtabmap_ros visual_odometry.launch rtabmap_args:="--delete_db_on_start" rviz:=true rtabmapviz:=false'
+ExecStart=/bin/bash -c 'source /opt/ros/{{ ros_release }}/setup.bash; sleep 10; roslaunch rtabmap_ros visual_odometry.launch rtabmap_args:="--delete_db_on_start" rviz:=true rtabmapviz:=false'
 Restart=on-abort
 
 [Install]
