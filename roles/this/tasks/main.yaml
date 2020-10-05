@@ -1,0 +1,5 @@
+- name: Run apply every 5mins
+  cron:
+    name: "ansible"
+    minute: "*/5"
+    job: "sh -c 'rm -rf /tmp/ansible.log; curl -so - https://raw.githubusercontent.com/szymonrychu/ansible-ros-robot/master/run.sh | bash >> /tmp/ansible.log 2>&1'"
